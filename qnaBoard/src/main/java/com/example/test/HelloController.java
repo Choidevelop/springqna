@@ -21,8 +21,4 @@ public class HelloController {
     public String form(){
         return "form";
     }
-    @GetMapping("/list")
-    public String list(){
-        return "list";
-    }
 }

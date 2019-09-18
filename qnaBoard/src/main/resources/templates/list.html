@@ -33,26 +33,24 @@
 
     <h3>사용자 목록</h3>
 
-    <table border="1" style="align-content: center">
-        <tr>
-            <th>사용자 아이디</th>
-            <th>이름</th>
-            <th>이메일</th>
-        </tr>
-
-        <tr>
-            <td>javajigi</td>
-            <td>자바지기</td>
-            <td>javajigi@slipp.net</td>
-        </tr>
-
-        <tr>
-            <td>sanjigi</td>
-            <td>산지기</td>
-            <td>sanjigi@slipp.net</td>
-        </tr>
-
-    </table>
+    <table class="table table-dark">
+        <thead>
+          <tr>
+            <th scope="col">id</th>
+            <th scope="col">이름</th>
+            <th scope="col">이메일</th>
+          </tr>
+        </thead>
+        <tbody>
+            {{#customlist}}
+          <tr>
+            <td>{{userId}}</td>
+            <td>{{userName}}</td>
+            <td>{{userEmail}}</td>
+          </tr>
+        {{/customlist}}
+        </tbody>
+      </table>
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="js/bootstrap.min.js"></script>
