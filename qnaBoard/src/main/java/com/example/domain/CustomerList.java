@@ -1,10 +1,20 @@
-package com.example.model;
+package com.example.domain;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 
 /**
  * CustomerList
  */
+@Entity
 public class CustomerList {
+    @Id
+    @GeneratedValue
+    private long id;
 
+    @Column(nullable = false)
     private String userId;
     private String userPw;
     private String userName;

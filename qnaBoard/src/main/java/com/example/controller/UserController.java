@@ -1,10 +1,9 @@
 package com.example.controller;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.example.domain.CustomerList;
+import com.example.domain.UserRepository;
 
-import com.example.model.CustomerList;
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,11 +14,12 @@ import org.springframework.web.bind.annotation.PostMapping;
  */
 @Controller
 public class UserController {
-    private List<CustomerList> users = new ArrayList<CustomerList>();
+    @Autowired
+    private UserRepository UserRepository;
     @PostMapping("/create")
     public String createUser(CustomerList list){
         
-        users.add(list);
+        UserRepository.save(list);
         System.out.println("user : " + list);
         return "redirect:/list";
     }
@@ -27,8 +27,7 @@ public class UserController {
     @GetMapping("/list")
     public String listUser(Model model){
 
-        System.out.println("/list : " + users);
-        model.addAttribute("customlist", users);
-        return "list";
+        model.addAttribute("customlist", UserRepository.findAll());
+        return "./user/list";
     }
 }

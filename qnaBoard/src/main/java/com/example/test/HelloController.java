@@ -19,6 +19,6 @@ public class HelloController {
     }
     @GetMapping("/form")
     public String form(){
-        return "form";
+        return "./user/form";
     }
 }
