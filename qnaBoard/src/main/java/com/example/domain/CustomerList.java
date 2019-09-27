@@ -12,7 +12,7 @@ import javax.persistence.Id;
 public class CustomerList {
     @Id
     @GeneratedValue
-    private long id;
+    private Long id;
 
     @Column(nullable = false)
     private String userId;
@@ -57,5 +57,11 @@ public class CustomerList {
         return "CustomerList [userEmail=" + userEmail + ", userId=" + userId + ", userName=" + userName + ", userPw="
                 + userPw + "]";
     }
+
+	public void update(CustomerList newUser) {
+        this.userPw = newUser.userPw;
+        this.userName = newUser.userName;
+        this.userEmail = newUser.userEmail;
+	}
 
 }

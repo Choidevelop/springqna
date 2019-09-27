@@ -17,8 +17,5 @@ public class HelloController {
     public String index(){
         return "index";
     }
-    @GetMapping("/form")
-    public String form(){
-        return "./user/form";
-    }
+    
 }
