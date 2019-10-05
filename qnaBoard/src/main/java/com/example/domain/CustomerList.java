@@ -14,12 +14,19 @@ public class CustomerList {
     @GeneratedValue
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String userId;
     private String userPw;
     private String userName;
     private String userEmail;
 
+
+    /**
+     * @return the id
+     */
+    public Long getId() {
+        return id;
+    }
     public String getUserId() {
         return userId;
     }
@@ -52,16 +59,18 @@ public class CustomerList {
         this.userEmail = userEmail;
     }
 
-    @Override
-    public String toString() {
-        return "CustomerList [userEmail=" + userEmail + ", userId=" + userId + ", userName=" + userName + ", userPw="
-                + userPw + "]";
-    }
+    
 
 	public void update(CustomerList newUser) {
         this.userPw = newUser.userPw;
         this.userName = newUser.userName;
         this.userEmail = newUser.userEmail;
 	}
+
+    @Override
+    public String toString() {
+        return "CustomerList [id=" + id + ", userId=" + userId + ", userPw=" + userPw + ", userName=" + userName
+                + ", userEmail=" + userEmail + "]";
+    }
 
 }
