@@ -13,6 +13,7 @@ import javax.persistence.ManyToOne;
 
 import com.example.domain.CustomerList;
 import com.example.question.Question;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -24,24 +25,30 @@ import org.hibernate.annotations.UpdateTimestamp;
 public class Answer {
     @Id
     @GeneratedValue
+    @JsonProperty
     private Long id;
 
     @ManyToOne
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_answer_writer"))
+    @JsonProperty
     private CustomerList writer;
 
     @ManyToOne
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_answer_to_question"))
+    @JsonProperty
     private Question question;
+    @JsonProperty
     @Lob
     private String contents;
 
     @Column(name = "createtime")
     @CreationTimestamp
+    @JsonProperty
     private LocalDateTime createdTimedAt;
 
     @UpdateTimestamp
     @Column(name = "updatetime")
+    @JsonProperty
     private LocalDateTime updateTimeAt;
 
     public Answer() {
