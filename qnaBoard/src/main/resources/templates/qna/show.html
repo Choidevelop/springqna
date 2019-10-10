@@ -70,7 +70,7 @@
                                     <div class="article-doc comment-doc">
                                         <p>{{contents}}</p>
                                     </div>
-                              
+
                                     <div class="article-util">
                                         <ul class="article-util-list">
                                             <li>
@@ -88,11 +88,12 @@
                                     </div>
                                 </article>
                                 {{/answers}}
-                                <form class="submit-write" method="POST" action="/questions/{{id}}/answers">
+                                <form class="answer-write" method="POST" action="/api/questions/{{id}}/answers">
                                     <div class="form-group" style="padding:14px;">
-                                        <textarea class="form-control" placeholder="Update your status" name="contents"></textarea>
+                                        <textarea class="form-control" placeholder="Update your status"
+                                            name="contents"></textarea>
                                     </div>
-                                    <input type="submit" class="btn btn-success pull-right" value="답변하기"/>
+                                    <input type="submit" class="btn btn-success pull-right" value="답변하기" />
                                     <div class="clearfix" />
                                 </form>
                             </div>
@@ -100,8 +101,9 @@
                     </div>
                 </div>
             </div>
+
+            {{/question}}
         </div>
-        {{/question}}
     </div>
 
     <script type="text/template" id="answerTemplate">

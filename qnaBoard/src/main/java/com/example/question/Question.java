@@ -33,11 +33,10 @@ public class Question {
     private CustomerList writer;
 
     @OneToMany(mappedBy = "question")
-    @OrderBy("id asc")
+    @OrderBy("id desc")
     private List<Answer> answers;
 
     private String title;
-    
     private String contents;
 
     @Column(name="createtime")
