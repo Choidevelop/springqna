@@ -1,9 +1,5 @@
 package com.example.question;
 
-import java.io.IOException;
-import java.io.PrintWriter;
-
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.example.domain.CustomerList;
@@ -30,16 +26,15 @@ public class QuestionController {
 
     @GetMapping("/form")
     public String form(HttpSession session) {
-        if(!HttpSessionUtils.isLoginUser(session)){
+        if (!HttpSessionUtils.isLoginUser(session)) {
             return "redirect:/users/login";
         }
         return "/qna/form";
     }
 
     @PostMapping("")
-    public String create(String title, String contents, HttpSession session)
-    {
-        if(!HttpSessionUtils.isLoginUser(session)){
+    public String create(String title, String contents, HttpSession session) {
+        if (!HttpSessionUtils.isLoginUser(session)) {
             return "redirect:/users/login";
         }
         CustomerList sessionUser = HttpSessionUtils.getUserFromSession(session);
@@ -49,43 +44,73 @@ public class QuestionController {
     }
 
     @GetMapping("/{id}")
-    public String show(@PathVariable Long id, Model model){
+    public String show(@PathVariable Long id, Model model) {
         model.addAttribute("question", questionRepository.findById(id).get());
         return "/qna/show";
     }
-    
+
     @GetMapping("/{id}/form")
-    public String updateForm(@PathVariable Long id, Model model, HttpSession session, 
-    HttpServletResponse response) throws IOException{
-        if (HttpSessionUtils.isLoginUser(session)==false) {
-            System.out.println("업데이트 폼으로 넘어가지 못함");
+    public String updateForm(@PathVariable Long id, Model model, HttpSession session) {
+        Question question = questionRepository.findById(id).get();
+        PermissionResult result = valid(session, question);
+        if (!result.isVaild()) {
+            model.addAttribute("errorMessage", result.getErrorMessage());
+
+            System.out.println("errorMessage = " + result.getErrorMessage());
             return "/user/login";
         }
-        CustomerList sessionedUser = HttpSessionUtils.getUserFromSession(session);
-        System.out.println("sessionedUser = " + sessionedUser.getId() + "\n" + "id = " + id);
-        if (!id.equals(sessionedUser.getId())) {
-            response.setContentType("text/html; charset=UTF-8");
-            PrintWriter out = response.getWriter();
-            out.println("<script>alert('본인 게시글만 수정할 수 있습니다.'); location.href='/users/login';</script>");
-            out.flush();
-        }
-
-        model.addAttribute("question", questionRepository.findById(id).get());
+        model.addAttribute("question", question);
+        System.out.println("question = " + question);
         return "/qna/updateForm";
     }
 
     @PutMapping("/{id}")
-    public String update(@PathVariable Long id, String title, String contents){
+    public String update(@PathVariable Long id, String title, String contents, Model model, HttpSession session) {
         Question question = questionRepository.findById(id).get();
+        PermissionResult result = valid(session, question);
+        if (!result.isVaild()) {
+            model.addAttribute("errorMessage", result.getErrorMessage());
+
+            System.out.println("errorMessage = " + result.getErrorMessage());
+            return "/user/login";
+        }
         question.update(title, contents);
         questionRepository.save(question);
+        model.addAttribute("question", question);
+        System.out.println("question = " + question);
         return String.format("redirect:/questions/%d", id);
+        // session.setAttribute(HttpSessionUtils.USER_SESSION_KEY, loginUser);
+
+        // System.out.println("session에 저장된 아이디는 = " + loginUser);
+
     }
 
     @DeleteMapping("/{id}")
-    public String delete(@PathVariable Long id){
+    public String delete(@PathVariable Long id, Model model, HttpSession session) {
+        Question question = questionRepository.findById(id).get();
+        PermissionResult result = valid(session, question);
+        if (!result.isVaild()) {
+            model.addAttribute("errorMessage", result.getErrorMessage());
+
+            System.out.println("errorMessage = " + result.getErrorMessage());
+            return "/user/login";
+        }
         questionRepository.deleteById(id);
         return "redirect:/";
     }
-    
+
+    /*
+     * 로그인 정보 및 사용자 권환 확인 메소드
+     */
+    private PermissionResult valid(HttpSession session, Question question) {
+        if (!HttpSessionUtils.isLoginUser(session)) {
+            return PermissionResult.fail("로그인 후 이용할 수 있습니다.");
+        }
+        CustomerList loginUser = HttpSessionUtils.getUserFromSession(session);
+        if (!question.isSameWriter(loginUser)) {
+            return PermissionResult.fail("자신이 쓴 글만 수정, 삭제 가능합니다.");
+        }
+        return PermissionResult.ok();
+    }
+
 }

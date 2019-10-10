@@ -20,13 +20,13 @@ public class CustomerList {
     private String userName;
     private String userEmail;
 
-
     /**
      * @return the id
      */
     public Long getId() {
         return id;
     }
+
     public String getUserId() {
         return userId;
     }
@@ -59,18 +59,41 @@ public class CustomerList {
         this.userEmail = userEmail;
     }
 
-    
-
-	public void update(CustomerList newUser) {
+    public void update(CustomerList newUser) {
         this.userPw = newUser.userPw;
         this.userName = newUser.userName;
         this.userEmail = newUser.userEmail;
-	}
+    }
 
     @Override
     public String toString() {
         return "CustomerList [id=" + id + ", userId=" + userId + ", userPw=" + userPw + ", userName=" + userName
                 + ", userEmail=" + userEmail + "]";
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((id == null) ? 0 : id.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        CustomerList other = (CustomerList) obj;
+        if (id == null) {
+            if (other.id != null)
+                return false;
+        } else if (!id.equals(other.id))
+            return false;
+        return true;
     }
 
 }
