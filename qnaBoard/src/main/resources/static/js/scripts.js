@@ -1,4 +1,5 @@
-$(".answer-write input[type=submit]").click(addAnswer);
+// $(".answer-write input[type=submit]").click(addAnswer);
+$(document).on('click','.answer-write input[type=submit]', addAnswer);
 
 function addAnswer(e) {
   e.preventDefault();
@@ -11,31 +12,63 @@ function addAnswer(e) {
   console.log("url : " + url);
 
   $.ajax({
-    type : 'post', 
-    url : url,
-    data : queryString,
-    dataType : 'json',
-    error : onError,
-    success : onSuccess});
+    type: 'post',
+    url: url,
+    data: queryString,
+    dataType: 'json',
+    error: onError,
+    success: onSuccess
+  });
 }
 
-function onError(){
+function onError() {
 
 }
-function onSuccess(data, status){
+function onSuccess(data, status) {
   console.log(data);
   var answerTemplate = $("#answerTemplate").html();
-  var template = answerTemplate.format(data.writer.userId, data.createdTimedAt, data.contents, data.id, data.id);
+  var template = answerTemplate.format(data.writer.userId, data.createdTimedAt, data.contents, data.question.id, data.id, data.question.countOfAnswer);
+  $(".qna-comment-count").html("<strong>"+data.question.countOfAnswer+"</strong>개의 의견");
   $(".qna-comment-slipp-articles").prepend(template);
   $(".answer-write textarea").val("");
 }
 
-String.prototype.format = function() {
+// $(".link-delete-article").click(deleteAnswer);
+$(document).on('click','.link-delete-article', deleteAnswer);
+
+function deleteAnswer(e) {
+  e.preventDefault();
+
+  var deleteBtn = $(this);
+  var url = deleteBtn.attr("href");
+  console.log("url : " + url);
+  $.ajax({
+    type: 'delete',
+    url: url,
+    dataType: 'json',
+    error: function (xha, status) {
+      console.log("error");
+    },
+    success: function (data, status) {
+      console.log(data);
+
+      if(data.vaild){
+        deleteBtn.closest("article").remove();
+        $(".qna-comment-count").html("<strong>"+data.question.countOfAnswer+"</strong>개의 의견");
+      }
+      else{
+        alert(data.errorMessage);
+      }
+      }
+  });
+}
+
+String.prototype.format = function () {
   var args = arguments;
-  return this.replace(/{(\d+)}/g, function(match, number) {
+  return this.replace(/{(\d+)}/g, function (match, number) {
     return typeof args[number] != 'undefined'
-        ? args[number]
-        : match
-        ;
+      ? args[number]
+      : match
+      ;
   });
 };

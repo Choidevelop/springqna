@@ -2,8 +2,6 @@ package com.example.domain;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -12,12 +10,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * CustomerList
  */
 @Entity
-public class CustomerList {
-    @Id
-    @GeneratedValue
-    @JsonProperty
-    private Long id;
-
+public class CustomerList extends AbstractEntity{
     @Column(nullable = false, unique = true)
     @JsonProperty
     private String userId;
@@ -27,13 +20,6 @@ public class CustomerList {
     private String userName;
     @JsonProperty
     private String userEmail;
-
-    /**
-     * @return the id
-     */
-    public Long getId() {
-        return id;
-    }
 
     public String getUserId() {
         return userId;
@@ -75,33 +61,7 @@ public class CustomerList {
 
     @Override
     public String toString() {
-        return "CustomerList [id=" + id + ", userId=" + userId + ", userPw=" + userPw + ", userName=" + userName
+        return "CustomerList [" + super.toString() + ", userId=" + userId + ", userPw=" + userPw + ", userName=" + userName
                 + ", userEmail=" + userEmail + "]";
     }
-
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((id == null) ? 0 : id.hashCode());
-        return result;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        CustomerList other = (CustomerList) obj;
-        if (id == null) {
-            if (other.id != null)
-                return false;
-        } else if (!id.equals(other.id))
-            return false;
-        return true;
-    }
-
 }
