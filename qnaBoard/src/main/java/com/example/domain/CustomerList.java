@@ -2,22 +2,23 @@ package com.example.domain;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * CustomerList
  */
 @Entity
-public class CustomerList {
-    @Id
-    @GeneratedValue
-    private Long id;
-
-    @Column(nullable = false)
+public class CustomerList extends AbstractEntity{
+    @Column(nullable = false, unique = true)
+    @JsonProperty
     private String userId;
+    @JsonIgnore
     private String userPw;
+    @JsonProperty
     private String userName;
+    @JsonProperty
     private String userEmail;
 
     public String getUserId() {
@@ -52,16 +53,15 @@ public class CustomerList {
         this.userEmail = userEmail;
     }
 
-    @Override
-    public String toString() {
-        return "CustomerList [userEmail=" + userEmail + ", userId=" + userId + ", userName=" + userName + ", userPw="
-                + userPw + "]";
-    }
-
-	public void update(CustomerList newUser) {
+    public void update(CustomerList newUser) {
         this.userPw = newUser.userPw;
         this.userName = newUser.userName;
         this.userEmail = newUser.userEmail;
-	}
+    }
 
+    @Override
+    public String toString() {
+        return "CustomerList [" + super.toString() + ", userId=" + userId + ", userPw=" + userPw + ", userName=" + userName
+                + ", userEmail=" + userEmail + "]";
+    }
 }
