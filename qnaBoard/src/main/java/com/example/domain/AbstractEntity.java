@@ -6,6 +6,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -17,13 +19,16 @@ public class AbstractEntity {
 
     @Id
     @GeneratedValue
+    @JsonProperty
     private Long id;
-
+    
+    @JsonProperty
     @CreationTimestamp
-    private LocalDateTime createdTimedAt;
-
+    public LocalDateTime createdTimedAt;
+    
+    @JsonProperty
     @UpdateTimestamp
-    private LocalDateTime updateTimeAt;
+    public LocalDateTime updateTimeAt;
 
     @Override
     public int hashCode() {

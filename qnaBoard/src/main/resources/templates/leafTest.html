@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="UTF-8">
+    <title>handlebars 예제</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+</head>
+
+<body>
+    <h1>handlebars 예제</h1>
+
+    <table>
+        <tr>
+            <th>작성일</th>
+            <th>작성자</th>
+            <th>번호</th>
+        </tr>
+        <tr th:each="test: ${questions}" id="question_table">
+            <td th:text="${test.title}"></td>
+            <td th:text="${test.contents}"></td>
+            <td th:text="${test.writer.userId}"></td>
+            <td th:text="${test.createdTimedAt}"></td>
+        </tr>
+    </table>
+    <br><br>
+    <h1>page에는 무엇이 있을까요?</h1>
+    <table>
+        <tr th:each="question: ${questions.getContent()}">
+            <td th:text="${question.id}"></td>
+            <td th:text="${question.title}"></td>
+            <td th:text="${question.contents}"></td>
+            <td th:text="${question.writer.userId}"></td>
+            <td th:text="${question.createdTimedAt}"></td>
+        </tr>
+    </table>
+    <nav aria-label="Page navigation example">
+        <ul class="pagination justify-content-center" th:with="start=${T(Math).floor(questions.getNumber()/10)*10 + 1},
+                    last=(${start + 9 < questions.getTotalPages() ? start + 9 : questions.getTotalPages()}), 
+                    pageNumber=${questions.getNumber()}">
+            <li th:if="${pageNumber}>0" class="page-item">
+                <a class="page-link" th:href="@{/test1}" tabindex="-1">처음</a>
+            </li>
+            <li th:if="${questions.hasPrevious()}">
+                <a class="page-link" th:href="${pageNumber==1}? @{/test1} : @{/test1(page=${pageNumber})}"
+                    tabindex="-1">이전</a>
+            </li>
+            <li th:each="page: ${#numbers.sequence(start, last)}" class="page-link" th:class="${page == pageNumber+1} ? 'page-item disabled'">
+            <a th:text="${page}" th:href="@{/test1(page=${page})}" class="page-link"></a>
+    </li>
+    <li class="page-item" th:if="${questions.hasNext()}" th:with="next=${questions.nextPageable().getPageNumber()}">
+        <a class="page-link" th:href="${questions.isLast()} ? @{/test1(page=${pageNumber+2})} : @{/test1(page=${next+1})}">다음</a>
+    </li>
+    <li class="page-item" th:if="${questions.isLast()}">
+    </li>
+    <li class="page-item" th:unless="${questions.isLast()}">
+    <a th:href="@{/test1(page=${questions.getTotalPages()})}" class="page-link">끝</a>
+    </li>
+    </ul>
+  </nav>
+
+    <!-- <script id="entry-template" type="text/x-handlebars-template">
+
+</script> -->
+<script src="/js/jquery-2.2.0.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/scripts.js"></script>
+</body>
+
+</html>

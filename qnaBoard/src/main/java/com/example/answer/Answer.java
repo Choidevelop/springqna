@@ -31,8 +31,9 @@ public class Answer extends AbstractEntity{
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_answer_to_question"))
     @JsonProperty
     private Question question;
-    @JsonProperty
+
     @Lob
+    @JsonProperty
     private String contents;
 
     @Column(name = "createtime")
